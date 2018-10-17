@@ -5,7 +5,6 @@
 
 CONFIG_STANDALONE_LOAD_ADDR ?= 0x40000
 
-PLATFORM_CPPFLAGS += -fno-strict-aliasing
 PLATFORM_CPPFLAGS += -fomit-frame-pointer
 PF_CPPFLAGS_X86   := $(call cc-option, -fno-toplevel-reorder, \
 		     $(call cc-option, -fno-unit-at-a-time))
@@ -27,7 +26,7 @@ else
 PLATFORM_CPPFLAGS += $(if $(CONFIG_SPL_BUILD),,-fpic) -fno-common -m64
 endif
 
-PLATFORM_RELFLAGS += -ffunction-sections -fvisibility=hidden
+PLATFORM_RELFLAGS += -fdata-sections -ffunction-sections -fvisibility=hidden
 
 PLATFORM_LDFLAGS += -Bsymbolic -Bsymbolic-functions
 PLATFORM_LDFLAGS += -m $(if $(IS_32BIT),elf_i386,elf_x86_64)

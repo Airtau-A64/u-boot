@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: GPL-2.0+
 
-dtb-$(CONFIG_AT91FAMILY) += at91sam9260-smartweb.dtb \
-	at91sam9g20-taurus.dtb \
-	at91sam9g45-corvus.dtb \
-	at91sam9g45-gurnard.dtb
+dtb-$(CONFIG_TARGET_SMARTWEB) += at91sam9260-smartweb.dtb
+dtb-$(CONFIG_TARGET_TAURUS) += at91sam9g20-taurus.dtb
+dtb-$(CONFIG_TARGET_CORVUS) += at91sam9g45-corvus.dtb
+dtb-$(CONFIG_TARGET_GURNARD) += at91sam9g45-gurnard.dtb
 
 dtb-$(CONFIG_S5PC100) += s5pc1xx-smdkc100.dtb
 dtb-$(CONFIG_S5PC110) += s5pc1xx-goni.dtb
@@ -53,10 +53,13 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
 	rk3399-puma-ddr1866.dtb \
 	rv1108-evb.dtb
 dtb-$(CONFIG_ARCH_MESON) += \
+	meson-gxbb-nanopi-k2.dtb \
 	meson-gxbb-odroidc2.dtb \
+	meson-gxbb-nanopi-k2.dtb \
 	meson-gxl-s905x-p212.dtb \
 	meson-gxl-s905x-libretech-cc.dtb \
-	meson-gxl-s905x-khadas-vim.dtb
+	meson-gxl-s905x-khadas-vim.dtb \
+	meson-gxm-khadas-vim2.dtb
 dtb-$(CONFIG_TEGRA) += tegra20-harmony.dtb \
 	tegra20-medcom-wide.dtb \
 	tegra20-paz00.dtb \
@@ -129,7 +132,10 @@ dtb-$(CONFIG_ARCH_UNIPHIER_SLD8) += \
 
 dtb-$(CONFIG_ARCH_ZYNQ) += \
 	zynq-cc108.dtb \
+	zynq-cse-nand.dtb \
+	zynq-cse-nor.dtb \
 	zynq-cse-qspi-single.dtb \
+	zynq-dlc20-rev1.0.dtb \
 	zynq-microzed.dtb \
 	zynq-minized.dtb \
 	zynq-picozed.dtb \
@@ -145,11 +151,14 @@ dtb-$(CONFIG_ARCH_ZYNQ) += \
 	zynq-zc770-xm013.dtb \
 	zynq-zed.dtb \
 	zynq-zturn.dtb \
-	zynq-zybo.dtb
+	zynq-zybo.dtb \
+	zynq-zybo-z7.dtb
 dtb-$(CONFIG_ARCH_ZYNQMP) += \
+	avnet-ultra96-rev1.dtb			\
 	zynqmp-mini-emmc0.dtb			\
 	zynqmp-mini-emmc1.dtb			\
 	zynqmp-mini-nand.dtb			\
+	zynqmp-mini-qspi.dtb			\
 	zynqmp-zcu100-revC.dtb			\
 	zynqmp-zcu102-revA.dtb			\
 	zynqmp-zcu102-revB.dtb			\
@@ -385,6 +394,9 @@ dtb-$(CONFIG_MACH_SUN50I_H5) += \
 	sun50i-h5-orangepi-pc2.dtb \
 	sun50i-h5-orangepi-prime.dtb \
 	sun50i-h5-orangepi-zero-plus2.dtb
+dtb-$(CONFIG_MACH_SUN50I_H6) += \
+	sun50i-h6-orangepi-one-plus.dtb \
+	sun50i-h6-pine-h64.dtb
 dtb-$(CONFIG_MACH_SUN50I) += \
 	sun50i-a64-amarula-relic.dtb \
 	sun50i-a64-bananapi-m64.dtb \
@@ -430,12 +442,15 @@ dtb-$(CONFIG_MX6UL) += \
 	imx6ul-geam.dtb \
 	imx6ul-isiot-emmc.dtb \
 	imx6ul-isiot-nand.dtb \
-	imx6ul-opos6uldev.dtb
+	imx6ul-opos6uldev.dtb \
+	imx6ul-14x14-evk.dtb \
+	imx6ul-9x9-evk.dtb
 
 dtb-$(CONFIG_MX6ULL) += imx6ull-14x14-evk.dtb
 
 dtb-$(CONFIG_MX7) += imx7-colibri.dtb \
-	imx7d-sdb.dtb
+	imx7d-sdb.dtb \
+	imx7d-sdb-qspi.dtb
 
 dtb-$(CONFIG_ARCH_MX7ULP) += imx7ulp-evk.dtb
 
@@ -536,7 +551,10 @@ dtb-$(CONFIG_ARCH_ASPEED) += ast2500-evb.dtb
 dtb-$(CONFIG_ARCH_STI) += stih410-b2260.dtb
 
 dtb-$(CONFIG_TARGET_STM32MP1) += \
-	stm32mp157c-ed1.dtb
+	stm32mp157c-ed1.dtb \
+	stm32mp157c-ev1.dtb
+
+dtb-$(CONFIG_SOC_K3_AM6) += k3-am654-base-board.dtb
 
 targets += $(dtb-y)
 

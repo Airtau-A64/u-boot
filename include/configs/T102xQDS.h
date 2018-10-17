@@ -29,7 +29,6 @@
 #ifdef CONFIG_RAMBOOT_PBL
 #define CONFIG_SYS_FSL_PBL_PBI board/freescale/t102xqds/t1024_pbi.cfg
 #define CONFIG_SPL_FLUSH_IMAGE
-#define CONFIG_SPL_TARGET		"u-boot-with-spl.bin"
 #define CONFIG_SPL_TEXT_BASE		0xFFFD8000
 #define CONFIG_SPL_PAD_TO		0x40000
 #define CONFIG_SPL_MAX_SIZE		0x28000
@@ -136,7 +135,6 @@
 #endif
 
 #if defined(CONFIG_SPIFLASH)
-#define CONFIG_SYS_EXTRA_ENV_RELOC
 #define CONFIG_ENV_SPI_BUS		0
 #define CONFIG_ENV_SPI_CS		0
 #define CONFIG_ENV_SPI_MAX_HZ		10000000
@@ -145,12 +143,10 @@
 #define CONFIG_ENV_OFFSET		0x100000	/* 1MB */
 #define CONFIG_ENV_SECT_SIZE		0x10000
 #elif defined(CONFIG_SDCARD)
-#define CONFIG_SYS_EXTRA_ENV_RELOC
 #define CONFIG_SYS_MMC_ENV_DEV		0
 #define CONFIG_ENV_SIZE			0x2000
 #define CONFIG_ENV_OFFSET		(512 * 0x800)
 #elif defined(CONFIG_NAND)
-#define CONFIG_SYS_EXTRA_ENV_RELOC
 #define CONFIG_ENV_SIZE			0x2000
 #define CONFIG_ENV_OFFSET		(10 * CONFIG_SYS_NAND_BLOCK_SIZE)
 #elif defined(CONFIG_SRIO_PCIE_BOOT_SLAVE)
@@ -200,7 +196,6 @@ unsigned long get_board_ddr_clk(void);
 #define CONFIG_SPL_RELOC_MALLOC_ADDR	(CONFIG_SPL_GD_ADDR + 12 * 1024)
 #define CONFIG_SPL_RELOC_MALLOC_SIZE	(30 << 10)
 #define CONFIG_SPL_RELOC_STACK		(CONFIG_SPL_GD_ADDR + 64 * 1024)
-#define CONFIG_SPL_RELOC_STACK_SIZE	(22 << 10)
 
 #ifdef CONFIG_PHYS_64BIT
 #define CONFIG_SYS_DCSRBAR		0xf0000000
@@ -419,8 +414,6 @@ unsigned long get_board_ddr_clk(void);
 #if defined(CONFIG_RAMBOOT_PBL)
 #define CONFIG_SYS_RAMBOOT
 #endif
-
-#define CONFIG_MISC_INIT_R
 
 #define CONFIG_HWCONFIG
 
@@ -663,7 +656,6 @@ unsigned long get_board_ddr_clk(void);
 #define CONFIG_SYS_DPAA_FMAN
 
 #define CONFIG_QE
-#define CONFIG_U_QE
 /* Default address of microcode for the Linux FMan driver */
 #if defined(CONFIG_SPIFLASH)
 /*
@@ -723,7 +715,6 @@ unsigned long get_board_ddr_clk(void);
 #endif
 
 #ifdef CONFIG_FMAN_ENET
-#define CONFIG_MII		/* MII PHY management */
 #define CONFIG_ETHPRIME		"FM1@DTSEC4"
 #endif
 
@@ -731,8 +722,6 @@ unsigned long get_board_ddr_clk(void);
  * Dynamic MTD Partition support with mtdparts
  */
 #ifdef CONFIG_MTD_NOR_FLASH
-#define CONFIG_MTD_DEVICE
-#define CONFIG_MTD_PARTITIONS
 #define CONFIG_FLASH_CFI_MTD
 #endif
 

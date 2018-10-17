@@ -253,7 +253,6 @@
 
 #define CONFIG_TSECV2
 
-#define CONFIG_MII			/* MII PHY management */
 #define CONFIG_TSEC1		1
 #define CONFIG_TSEC1_NAME	"eTSEC1"
 #define CONFIG_TSEC2		1
@@ -299,8 +298,6 @@
 #define CONFIG_SYS_MMC_ENV_DEV	0
 #endif
 
-#define CONFIG_SYS_EXTRA_ENV_RELOC
-
 /*
  * Command line configuration.
  */
@@ -311,7 +308,6 @@
 /*
  * Board initialisation callbacks
  */
-#define CONFIG_MISC_INIT_R
 #endif /* CONFIG_TRAILBLAZER */
 
 /*

@@ -24,6 +24,7 @@
 #include <asm/arch/mem.h>
 #include <asm/arch/sys_proto.h>
 #include <asm/gpio.h>
+#include <asm/omap_mmc.h>
 #include <asm/mach-types.h>
 #include <linux/mtd/rawnand.h>
 #include <asm/omap_musb.h>
@@ -39,39 +40,35 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
-/*
- * two dimensional array of strucures containining board name and Linux
- * machine IDs; row it selected based on CPU column is slected based
- * on hsusb0_data5 pin having a pulldown resistor
- */
-static struct board_id {
-	char *name;
-	int machine_id;
-	char *fdtfile;
-} boards[2][2] = {
-	{
-		{
-			.name		= "OMAP35xx SOM LV",
-			.machine_id	= MACH_TYPE_OMAP3530_LV_SOM,
-			.fdtfile	= "logicpd-som-lv-35xx-devkit.dtb",
-		},
-		{
-			.name		= "OMAP35xx Torpedo",
-			.machine_id	= MACH_TYPE_OMAP3_TORPEDO,
-			.fdtfile	= "logicpd-torpedo-35xx-devkit.dtb",
-		},
-	},
-	{
-		{
-			.name		= "DM37xx SOM LV",
-			.fdtfile	= "logicpd-som-lv-37xx-devkit.dtb",
-		},
-		{
-			.name		= "DM37xx Torpedo",
-			.fdtfile	= "logicpd-torpedo-37xx-devkit.dtb",
-		},
-	},
+/* This is only needed until SPL gets OF support */
+#ifdef CONFIG_SPL_BUILD
+static const struct ns16550_platdata omap3logic_serial = {
+	.base = OMAP34XX_UART1,
+	.reg_shift = 2,
+	.clock = V_NS16550_CLK,
+	.fcr = UART_FCR_DEFVAL,
 };
+
+U_BOOT_DEVICE(omap3logic_uart) = {
+	"ns16550_serial",
+	&omap3logic_serial
+};
+
+static const struct omap_hsmmc_plat omap3_logic_mmc0_platdata = {
+	.base_addr = (struct hsmmc *)OMAP_HSMMC1_BASE,
+	.cfg.host_caps = MMC_MODE_HS_52MHz | MMC_MODE_HS | MMC_MODE_4BIT,
+	.cfg.f_min = 400000,
+	.cfg.f_max = 52000000,
+	.cfg.voltages = MMC_VDD_32_33 | MMC_VDD_33_34 | MMC_VDD_165_195,
+	.cfg.b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT,
+};
+
+U_BOOT_DEVICE(am335x_mmc0) = {
+	.name = "omap_hsmmc",
+	.platdata = &omap3_logic_mmc0_platdata,
+};
+
+#endif
 
 #ifdef CONFIG_SPL_OS_BOOT
 int spl_start_uboot(void)
@@ -195,7 +192,6 @@ int ehci_hcd_stop(int index)
 
 #endif /* CONFIG_USB_EHCI_HCD */
 
-
 /*
  * Routine: misc_init_r
  * Description: Configure board specific parts
@@ -211,11 +207,6 @@ int misc_init_r(void)
 
 	return 0;
 }
-
-/*
- * BOARD_ID_GPIO - GPIO of pin with optional pulldown resistor on SOM LV
- */
-#define BOARD_ID_GPIO	189 /* hsusb0_data5 pin */
 
 /*
  * Routine: board_init
@@ -244,65 +235,10 @@ static void unlock_nand(void)
 
 int board_late_init(void)
 {
-	struct board_id *board;
-	unsigned int val;
-
-	/*
-	 * To identify between a SOM LV and Torpedo module,
-	 * a pulldown resistor is on hsusb0_data5 for the SOM LV module.
-	 * Drive the pin (and let it soak), then read it back.
-	 * If the pin is still high its a Torpedo.  If low its a SOM LV
-	 */
-
-	/* Mux hsusb0_data5 as a GPIO */
-	MUX_VAL(CP(HSUSB0_DATA5),	(IEN  | PTD | DIS | M4));
-
-	if (gpio_request(BOARD_ID_GPIO, "husb0_data5.gpio_189") == 0) {
-
-		/*
-		 * Drive BOARD_ID_GPIO - the pulldown resistor on the SOM LV
-		 * will drain the voltage.
-		 */
-		gpio_direction_output(BOARD_ID_GPIO, 0);
-		gpio_set_value(BOARD_ID_GPIO, 1);
-
-		/* Let it soak for a bit */
-		sdelay(0x100);
-
-		/*
-		 * Read state of BOARD_ID_GPIO as an input and if its set.
-		 * If so the board is a Torpedo
-		 */
-		gpio_direction_input(BOARD_ID_GPIO);
-		val = gpio_get_value(BOARD_ID_GPIO);
-		gpio_free(BOARD_ID_GPIO);
-
-		board = &boards[!!(get_cpu_family() == CPU_OMAP36XX)][!!val];
-		printf("Board: %s\n", board->name);
-
-		/* Set the machine_id passed to Linux */
-		if (board->machine_id)
-			gd->bd->bi_arch_number = board->machine_id;
-
-		/* If the user has not set fdtimage, set the default */
-		if (!env_get("fdtimage"))
-			env_set("fdtimage", board->fdtfile);
-	}
-
-	/* restore hsusb0_data5 pin as hsusb0_data5 */
-	MUX_VAL(CP(HSUSB0_DATA5),	(IEN  | PTD | DIS | M0));
-
 #ifdef CONFIG_CMD_NAND_LOCK_UNLOCK
 	unlock_nand();
 #endif
 	return 0;
-}
-#endif
-
-#if defined(CONFIG_MMC)
-int board_mmc_init(bd_t *bis)
-{
-	return omap_mmc_init(0, 0, 0, -1, -1);
 }
 #endif
 
@@ -332,5 +268,3 @@ int board_eth_init(bd_t *bis)
 	return smc911x_initialize(0, CONFIG_SMC911X_BASE);
 }
 #endif
-
-

@@ -51,8 +51,6 @@
 #define CONFIG_PCI_INDIRECT_BRIDGE
 #define CONFIG_FSL_ELBC 1
 
-#define CONFIG_MISC_INIT_R
-
 /*
  * On-board devices
  *
@@ -242,14 +240,13 @@
 				/* LB refresh timer prescal, 266MHz/32 */
 #define CONFIG_SYS_LBC_MRTPR	0x20000000  /*TODO */
 
-/* drivers/mtd/nand/nand.c */
+/* drivers/mtd/nand/raw/nand.c */
 #if defined(CONFIG_NAND) && defined(CONFIG_SPL_BUILD)
 #define CONFIG_SYS_NAND_BASE		0xFFF00000
 #else
 #define CONFIG_SYS_NAND_BASE		0xE2800000
 #endif
 
-#define CONFIG_MTD_DEVICE
 #define CONFIG_MTD_PARTITION
 
 #define CONFIG_SYS_MAX_NAND_DEVICE	1
