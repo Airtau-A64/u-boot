@@ -287,6 +287,16 @@ extern int soft_i2c_gpio_scl;
 
 #endif /* CONFIG_VIDEO_SUNXI */
 
+#ifdef CONFIG_VIDEO_DT_SIMPLEFB
+#define CONFIG_VIDEO_LOGO
+#define CONFIG_SPLASH_SCREEN
+#define CONFIG_SPLASH_SCREEN_ALIGN
+#define CONFIG_BMP_16BPP
+#define CONFIG_BMP_24BPP
+#define CONFIG_BMP_32BPP
+#define CONFIG_VIDEO_BMP_RLE8
+#endif
+
 /* Ethernet support */
 
 #ifdef CONFIG_SUN7I_GMAC
@@ -445,16 +455,6 @@ extern int soft_i2c_gpio_scl;
 #else
 #define CONSOLE_STDIN_SETTINGS \
 	"stdin=serial\0"
-#endif
-
-#if defined CONFIG_VIDEO || defined CONFIG_DM_VIDEO
-#define CONFIG_VIDEO_LOGO
-#define CONFIG_SPLASH_SCREEN
-#define CONFIG_SPLASH_SCREEN_ALIGN
-#define CONFIG_BMP_16BPP
-#define CONFIG_BMP_24BPP
-#define CONFIG_BMP_32BPP
-#define CONFIG_VIDEO_BMP_RLE8
 #endif
 
 #ifdef CONFIG_VIDEO
